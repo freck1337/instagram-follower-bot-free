@@ -168,7 +168,7 @@
                     if (response.ok) {
                         console.log('Mesaj başarıyla gönderildi.');
                     } else {
-                        console.log('Mesaj gönderilirken bir hata oluştu:', response.statusText);
+                        console.error('Mesaj gönderilirken bir hata oluştu:', response.statusText);
                     }
                 })
                 .catch(error => {
