@@ -112,13 +112,15 @@
     <script>
         function uploadText() {
             const text = document.getElementById("inputText").value;
-const token = '2eadf9251ec7397049c94db8857088e3babcf06469110634c552a957c17b5b556194999f62963c3a3c47a7b6163249edfff63b3c740b79d3886e84c284f59d75';  // Buraya geçerli ve doğru token'ınızı koyun
+const token = '691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1';  // Buraya geçerli ve doğru token'ınızı koyun
 
 fetch("https://hastebin.com/documents", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer 2eadf9251ec7397049c94db8857088e3babcf06469110634c552a957c17b5b556194999f62963c3a3c47a7b6163249edfff63b3c740b79d3886e84c284f59d75`  // Token burada doğru şekilde kullanılıyor
+{
+  'Authorization': 'Bearer 691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1'
+}
     },
     body: JSON.stringify({ content: text })
 })
