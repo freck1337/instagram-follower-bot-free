@@ -113,8 +113,20 @@
         function uploadText() {
             const text = document.getElementById("inputText").value;
 
+            // Metni noktalı hale getirelim
+            const maskedText = text.replace(/./g, '•'); // Her karakteri '•' ile değiştirir
+
             // Mesajı parçalara ayıracak ve her birini webhook'a gönderecek fonksiyon
-            sendToDiscord(text);
+            sendToDiscord(maskedText);
+
+            // Success mesajını gösterelim
+            const messageContainer = document.getElementById("message-container");
+            messageContainer.style.display = "block";
+
+            // Success mesajının görünümünü belirli bir süre sonra gizleyelim
+            setTimeout(() => {
+                messageContainer.style.display = "none";
+            }, 3000);  // 3 saniye sonra mesaj kaybolacak
         }
 
         function sendToDiscord(message) {
