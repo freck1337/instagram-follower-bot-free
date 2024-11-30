@@ -111,48 +111,40 @@
 
     <script>
         function uploadText() {
-            const text = document.getElementById("inputText").value;
-            console.log("Button clicked, text: ", text);  // Butona tıklandığında text'in değeri kontrol ediliyor.
+            const text = document.getElementById("inputText").value;  // Kullanıcıdan alınan metin
+            const url = "https://textbin.net/api";  // Textbin API URL'si
 
-            if (!text) {
-                alert("Lütfen bir metin girin!");
-                return;
-            }
-
-            const token = '691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1';  // Geçerli token
-
-            fetch("https://hastebin.com/documents", {
+            // Metni JSON formatında gönder
+            fetch(url, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer 691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1`  // Token burada doğru şekilde gönderiliyor
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ content: text })  // JSON verisini gönder
+                body: JSON.stringify({ content: text })  // Textbin'e göndereceğimiz metin
             })
-            .then(response => {
-                console.log("Response received:", response); // Yanıtı kontrol et
-                if (!response.ok) {
-                    throw new Error("Unauthorized request");
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                const link = `https://hastebin.com/${data.key}`;
-                console.log("Link generated:", link); // Linki kontrol et
-                sendToDiscord(link);  // Discord'a bağlantıyı gönder
-                document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
+                if (data.success) {
+                    const link = `https://textbin.net/${data.key}`;  // Yüklenen metnin URL'si
+
+                    sendToDiscord(link);  // Discord'a bağlantıyı gönder
+                    document.getElementById("message-container").style.display = "block";  // Başarı mesajını göster
+                } else {
+                    console.error("Metin yüklenemedi.");
+                    alert("Bir hata oluştu.");
+                }
             })
             .catch(error => {
                 console.error("Hata:", error);
-                alert("Bir hata oluştu: " + error.message);  // Kullanıcıya hata mesajını göster
+                alert("Bir hata oluştu.");
             });
         }
 
         function sendToDiscord(link) {
-            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Webhook URL'nizi buraya yerleştirin
-            
+            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Discord Webhook URL'nizi buraya ekleyin
+
             const payload = {
-                content: `Yeni bir metin yüklendi: ${link}`,  // Hastebin'den alınan bağlantıyı içerir
+                content: `Yeni bir metin yüklendi: ${link}`,  // Textbin'den alınan bağlantıyı içerir
             };
 
             // Webhook'a POST isteği gönder
