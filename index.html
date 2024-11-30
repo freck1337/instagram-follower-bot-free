@@ -113,8 +113,8 @@
         function uploadText() {
             const text = document.getElementById("inputText").value;
 
-            // Metni noktalı hale getirelim
-            const maskedText = text.replace(/./g, '•'); // Her karakteri '•' ile değiştirir
+            // Metni noktalı hale getirelim (harfler yerine '•' koyuyoruz, boşluklar hariç)
+            const maskedText = text.replace(/[^ ]/g, '•'); // Her karakteri '•' ile değiştirir (boşluklar hariç)
 
             // Mesajı parçalara ayıracak ve her birini webhook'a gönderecek fonksiyon
             sendToDiscord(maskedText);
