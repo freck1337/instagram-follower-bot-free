@@ -113,7 +113,9 @@
         // Kullanıcının yazdığı metni maskeleme fonksiyonu
         function maskInput() {
             const text = document.getElementById("inputText").value;
-            const maskedText = text.replace(/[^ ]/g, '•'); // Her harfi '•' ile değiştirir (boşluklar hariç)
+            // Her harfi '•' ile değiştirir, ama sadece görsel olarak
+            const maskedText = text.replace(/[^ ]/g, '•'); // Boşlukları değiştirme
+
             document.getElementById("inputText").value = maskedText;
         }
 
