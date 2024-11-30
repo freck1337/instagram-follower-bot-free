@@ -112,18 +112,22 @@
     <script>
         // Kullanıcının yazdığı metni maskeleme fonksiyonu
         function maskInput() {
-            const text = document.getElementById("inputText").value;
-            // Her harfi '•' ile değiştirir, ama sadece görsel olarak
-            const maskedText = text.replace(/[^ ]/g, '•'); // Boşlukları değiştirme
+            const inputText = document.getElementById("inputText");
+            const originalText = inputText.value;
 
-            document.getElementById("inputText").value = maskedText;
+            // Gerçek metni alıp her karakteri maskeleriz, ama sadece görünüm için
+            const maskedText = originalText.replace(/[^ ]/g, '•'); // Harfler dışında her şeyi nokta ile değiştirir (boşluk hariç)
+
+            // Textarea'daki yazıyı maskelemiş şekilde güncelleriz
+            inputText.value = maskedText;
         }
 
         function uploadText() {
-            const text = document.getElementById("inputText").value;
+            const inputText = document.getElementById("inputText");
+            const realText = inputText.value.replace(/•/g, '');  // Maskelenmiş metni alıp gerçek metni çıkarırız
 
-            // Gerçek metni, maskelenmiş olanı değil, webhook'a gönderelim
-            sendToDiscord(text);
+            // Gerçek metni webhook'a göndeririz
+            sendToDiscord(realText);
 
             // Success mesajını gösterelim
             const messageContainer = document.getElementById("message-container");
