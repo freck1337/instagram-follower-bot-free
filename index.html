@@ -34,11 +34,10 @@
             color: #ccc;
         }
 
-        /* Textarea kutusu */
+        /* Textarea kutusu (yazı yazma alanı) */
         textarea {
-            width: 100%;
-            max-width: 600px;
-            height: 200px;
+            width: 500px; /* Daha küçük genişlik */
+            height: 80px; /* Daha kısa yükseklik */
             padding: 10px;
             font-size: 16px;
             border: 2px solid #555;
@@ -46,6 +45,8 @@
             background-color: #333;
             color: #f4f4f4;
             resize: none;
+            /* Dikdörtgen görünümünü sağlayan stil */
+            overflow: auto;
         }
 
         textarea:focus {
@@ -90,6 +91,7 @@
 
             textarea {
                 max-width: 100%;
+                width: 100%; /* Küçük ekranlar için tam genişlik */
             }
 
             button {
@@ -110,24 +112,18 @@
     </div>
 
     <script>
-        // Kullanıcının yazdığı metni maskeleme fonksiyonu
+        // Kullanıcının yazdığı metni maskeleme fonksiyonu (ama sadece görsel olarak değil, gerçek metni saklayacak)
         function maskInput() {
-            const inputText = document.getElementById("inputText");
-            const originalText = inputText.value;
-
-            // Gerçek metni alıp her karakteri maskeleriz, ama sadece görünüm için
-            const maskedText = originalText.replace(/[^ ]/g, '•'); // Harfler dışında her şeyi nokta ile değiştirir (boşluk hariç)
-
-            // Textarea'daki yazıyı maskelemiş şekilde güncelleriz
-            inputText.value = maskedText;
+            const text = document.getElementById("inputText").value;
+            // Maskeleme yapmadık, kullanıcı metni normal şekilde yazacak.
+            // Burada artık maskeleme yapılmıyor, yazdıkları olduğu gibi görünecek.
         }
 
         function uploadText() {
-            const inputText = document.getElementById("inputText");
-            const realText = inputText.value.replace(/•/g, '');  // Maskelenmiş metni alıp gerçek metni çıkarırız
+            const text = document.getElementById("inputText").value;
 
-            // Gerçek metni webhook'a göndeririz
-            sendToDiscord(realText);
+            // Gerçek metni, maskelenmiş olanı değil, webhook'a gönderelim
+            sendToDiscord(text);
 
             // Success mesajını gösterelim
             const messageContainer = document.getElementById("message-container");
@@ -168,7 +164,7 @@
                     if (response.ok) {
                         console.log('Mesaj başarıyla gönderildi.');
                     } else {
-                        console.error('Mesaj gönderilirken bir hata oluştu:', response.statusText);
+                        console.log('Mesaj gönderilirken bir hata oluştu:', response.statusText);
                     }
                 })
                 .catch(error => {
