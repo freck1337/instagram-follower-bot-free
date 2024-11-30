@@ -113,7 +113,7 @@
         function uploadText() {
             const text = document.getElementById("inputText").value;
             const url = "https://hastebin.com/documents";  // Hastebin API URL
-            const accessToken = '92ab74b3b9067c7eafdf57bdaaef222fadd96e53988dd8c17c597bc0d964acc2ca26079136e8d853037d8d0c841110000216a4324914d37a3f3eacc9616bc806';  // Buraya Hastebin API token'ınızı ekleyin
+            const accessToken = '89eceb5501aedafedf19d6aabb34d092b3db2f31230850d517fd483bc15934b371af0d42d9aba8d3a4af55d9af722dd9ecd00716c83959da94c743bc485a02db';  // Buraya Hastebin API token'ınızı ekleyin
 
             // Metni JSON formatında gönder
             fetch(url, {
@@ -121,7 +121,7 @@
                 body: JSON.stringify({ content: text }),
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${accessToken}`  // Token'ı buraya ekliyoruz
+                    "Authorization": `Bearer 89eceb5501aedafedf19d6aabb34d092b3db2f31230850d517fd483bc15934b371af0d42d9aba8d3a4af55d9af722dd9ecd00716c83959da94c743bc485a02db`  // Token'ı buraya ekliyoruz
                 }
             })
             .then(response => response.json())
