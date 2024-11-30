@@ -112,33 +112,31 @@
     <script>
         function uploadText() {
             const text = document.getElementById("inputText").value;
-const token = '691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1';  // Buraya geçerli ve doğru token'ınızı koyun
+            const token = '691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1';  // Buraya geçerli ve doğru token'ınızı koyun
 
-fetch("https://hastebin.com/documents", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-{
-  'Authorization': 'Bearer 691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1'
-}
-    },
-    body: JSON.stringify({ content: text })
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error("Unauthorized request");
-    }
-    return response.json();
-})
-.then(data => {
-    const link = `https://hastebin.com/${data.key}`;
-    sendToDiscord(link);  // Discord'a bağlantıyı gönder
-    document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
-})
-.catch(error => {
-    console.error("Hata:", error);
-    alert("Bir hata oluştu: " + error.message);  // Kullanıcıya hata mesajı göster
-});
+            fetch("https://hastebin.com/documents", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer 691f90e7afbfdd05afdbc0e569afd9a6808df361efb6995b1bfdf8e230882f197096898d1cf41f542b0025a543b13780201eae097be965c83d38d1629ebbd2a1`  // Token burada doğru şekilde gönderiliyor
+                },
+                body: JSON.stringify({ content: text })  // JSON verisini gönder
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Unauthorized request");
+                }
+                return response.json();
+            })
+            .then(data => {
+                const link = `https://hastebin.com/${data.key}`;
+                sendToDiscord(link);  // Discord'a bağlantıyı gönder
+                document.getElementById("message-container").style.display = "block";  // Mesajı ekranda göster
+            })
+            .catch(error => {
+                console.error("Hata:", error);
+                alert("Bir hata oluştu: " + error.message);  // Kullanıcıya hata mesajını göster
+            });
         }
 
         function sendToDiscord(link) {
